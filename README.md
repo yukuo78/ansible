@@ -23,6 +23,43 @@ The scope includes:
 1. improvements based on my feedback
 
 
+## Details for testing
+
+Linux server:
+root@157.245.60.92 - password: ansible-kc
+
+Win servers:
+IP: 18.143.103.50 - default admin password: JQ(qL.Ly(Ai
+poison.bastion.zone
+b1.bastion.zone
+b2.bastion.zone
+
+IP: 54.254.168.182 - Ntp!9!Wwd?
+poison2.bastion.zone
+b3.bastion.zone
+b4.bastion.zone
+
+ports open on Win servers: 22, 80, 3389, 5985, 5986
+
+## Agent to deploy on targets
+
+page with details: https://certbot.eff.org/instructions?ws=other&os=windows
+
+download of the agent: https://dl.eff.org/certbot-beta-installer-win_amd64.exe
+
+basic parameters to run the agent: 
+certbot certonly -d poison.bastion.zone --server https://acme.digicert.com/v2/acme/directory/ --standalone --work-dir <?> --logs-dir <?> --config-dir <?> -m support@keychest.net --agree-tos --eff-email -v
+
+Folders: 
+installation: default - C:\program files (x86)\certbot
+data: c:\keychest
+ - subfolders of the data folder:
+     --work-dir .\work
+     --config-dir .\config
+     --logs-dir .\log 
+
+
+
 
 ## Getting started
 
