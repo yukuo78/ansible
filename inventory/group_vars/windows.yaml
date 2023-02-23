@@ -1,0 +1,7 @@
+---
+ansible_user: Administrator
+ansible_host: 18.143.103.50
+ansible_password: JQ(qL.Ly(Ai
+ansible_port: 5986
+ansible_connection: winrm
+ansible_winrm_server_cert_validation: ignore
