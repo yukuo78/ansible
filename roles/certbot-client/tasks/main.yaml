@@ -1,0 +1,10 @@
+- name: Create installation Temp directory 
+  ansible.windows.win_file:
+    path: C:\Temp
+    state: directory
+
+- name: Copy a installer file, keep a backup
+  ansible.windows.win_copy:
+    src: certbot-beta-installer-win_amd64.exe
+    dest: C:\Temp\certbot-beta-installer-win_amd64.exe
+    backup: yes
