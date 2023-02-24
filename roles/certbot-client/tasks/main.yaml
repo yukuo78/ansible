@@ -8,3 +8,16 @@
     src: certbot-beta-installer-win_amd64.exe
     dest: C:\Temp\certbot-beta-installer-win_amd64.exe
     backup: yes
+
+- name: Run the installer executable with the '/S' argument to avoid GUI interaction
+  ansible.windows.win_command:
+    cmd: C:\Temp\certbot-beta-installer-win_amd64.exe /S
+
+- name: Run the installed tool
+  ansible.windows.win_command:
+    cmd: certbot --version
+  register: version_output
+
+- name: show output of version
+  debug:
+    var: version_output.stdout
