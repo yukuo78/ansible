@@ -14,6 +14,32 @@ The scope includes:
 1. testing of agents integration using a separate ACME proxy
 1. delivery of all the code and scripts into GitLab repo(s)
 
+### Variables required for playbooks
+
+Variables to be on 2 levels - global and per group - if "per group" is missing, the global will be used
+
+1. Default contents of the "hostname" file - use is below - as a starter, it can be a single line "hostname bestion.zone"  - which means that the domain for the certificate will be the result of the `hostname` command on the target - and if not  FQDN, the "bastion.zone" will be appended to the server name.
+1. Email address for installation of the agent - default to be ""
+1. location of working folder `c:\keychest` - as default - and 3 subfolders: logs_dir, work_dir, and config-dir
+1. default zone for server names without FQDN - i.e. domain name that should be attached to server names
+
+### Playbook 1 - agent install and upgrade
+
+The installation uses a local copy of the agent in the "tower". The tower will contain the agent itself and a text file with the version of the agent - it could be a simple text file with just one line.
+
+The playbook should check the installed version of the agent on an endpoint:
+
+`>.\certbot.exe --version`
+`>certbot 1.24.0`
+
+if the version is smaller than the version in the tower (e.g., the gitlab repo), it will uninstall the agent; which equals removing the folder `c:\program files (x86)\certbot`
+
+... and the next step is to re-run installation
+
+
+
+### Playbook 2 - certificate renewal
+
 
 ## Initial Milestones
 
