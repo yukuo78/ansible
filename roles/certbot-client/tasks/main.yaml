@@ -9,15 +9,33 @@
     dest: C:\Temp\certbot-beta-installer-win_amd64.exe
     backup: yes
 
+- name: Test previous version
+  ansible.windows.win_command:
+    cmd: certbot --version
+  register: pre_version_output
+
+- name: set version flag
+  set_fact:
+    old_version_exist: 1
+  when: pre_version_output.rc == 0
+
 - name: Run the installer executable with the '/S' argument to avoid GUI interaction
   ansible.windows.win_command:
     cmd: C:\Temp\certbot-beta-installer-win_amd64.exe /S
+    creates: C:\Program Files\Certbot
+  when: old_version_exist is undefined or (forece_isntall is defined and forece_isntall)
+  tags: install
 
 - name: Run the installed tool
   ansible.windows.win_command:
     cmd: certbot --version
   register: version_output
 
-- name: show output of version
+- name: show output of version for new installation
   debug:
     var: version_output.stdout
+
+- name: Run the installed tool
+  ansible.windows.win_command:
+    cmd: certbot certonly -d poison.bastion.zone --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
+  register: create_cert_result

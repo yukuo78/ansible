@@ -1,0 +1,4 @@
+hostname:
+  - b1.bastion.zone
+  - b2.bastion.zone
+domain: testing.zone

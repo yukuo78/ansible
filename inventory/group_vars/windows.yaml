@@ -5,3 +5,13 @@ ansible_password: JQ(qL.Ly(Ai
 ansible_port: 5986
 ansible_connection: winrm
 ansible_winrm_server_cert_validation: ignore
+
+
+## certbot installation configurations
+certbot_server_url: https://acme-staging-v02.api.letsencrypt.org/directory
+certbot_work_dir: .\work
+certbot_logs_dir: .\log
+certbot_config_dir: .\config
+
+## certbot installation controlling
+force_isntall: false
