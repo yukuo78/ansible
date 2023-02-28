@@ -3,6 +3,21 @@
     path: C:\Temp
     state: directory
 
+- name: Create working Temp directory 
+  ansible.windows.win_file:
+    path: "{{working_dir_base}}"
+    state: directory
+
+- name: Make sure hostname file exist
+  ansible.windows.win_file:
+    path: "{{working_dir_base}}\\hostname"
+    state: touch
+
+- name: Create working Temp directory 
+  community.windows.win_lineinfile:
+    path: "{{working_dir_base}}\\hostname"
+    line: "hostname {{default_zone}}"
+
 - name: Copy a installer file, keep a backup
   ansible.windows.win_copy:
     src: certbot-beta-installer-win_amd64.exe
@@ -35,7 +50,21 @@
   debug:
     var: version_output.stdout
 
+- name: get hostname from win command
+  ansible.windows.win_command:
+    cmd: hostname
+  register: hostname_output
+
+- name: set host fqdn
+  set_fact:
+    host_fqdn: "{{hostname_output.stdout | trim}}"
+
+- name: set host fqdn with default zone
+  set_fact:
+    host_fqdn: "{{hostname_output.stdout | trim}}.{{default_zone}}"
+  when: hostname_output.stdout.find('.') == -1
+
 - name: Run the installed tool
   ansible.windows.win_command:
-    cmd: certbot certonly -d poison.bastion.zone --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
+    cmd: certbot certonly -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
   register: create_cert_result
