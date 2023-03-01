@@ -40,6 +40,16 @@ if the version is smaller than the version in the tower (e.g., the gitlab repo),
 
 ### Playbook 2 - certificate renewal
 
+Consists of 2 parts:
+1. running the agent -> renewal of certificates
+1. creating a binary file (PFX) and importing it to Microsoft keystore
+
+For step 2) - we use the 'certutil' tool.
+1. create a copy of the certificate file and private key - so that they have the same filename, the only difference is the extension - 'cer' v 'key'
+1. change working directory to where the 2 files are
+1. call certutil `certutil -p "password,password" -mergepfx .\cert.pem .\cert.pfx`  - the "password" can be fixed as a word, assume the files are cert.pem and cert.key, output will go to cert.pfx
+1. call certutil again `certutil -p "password" -importpfx .\cert.pfx` - this will import the PFX file to MS keystore
+
 
 ## Initial Milestones
 
