@@ -1,3 +1,9 @@
+- name: uninstall an exiting certbot version
+  ansible.windows.win_file:
+    path: C:\Program Files\Certbot
+    state: absent
+  tags: [never, uninstall]
+
 - name: Create installation Temp directory 
   ansible.windows.win_file:
     path: C:\Temp
@@ -20,14 +26,15 @@
 
 - name: Copy a installer file, keep a backup
   ansible.windows.win_copy:
-    src: certbot-beta-installer-win_amd64.exe
-    dest: C:\Temp\certbot-beta-installer-win_amd64.exe
+    src: "{{ installer_exe }}"
+    dest: C:\Temp\{{installer_exe }}
     backup: yes
 
 - name: Test previous version
   ansible.windows.win_command:
     cmd: certbot --version
   register: pre_version_output
+  ignore_errors: yes
 
 - name: set version flag
   set_fact:
@@ -36,7 +43,7 @@
 
 - name: Run the installer executable with the '/S' argument to avoid GUI interaction
   ansible.windows.win_command:
-    cmd: C:\Temp\certbot-beta-installer-win_amd64.exe /S
+    cmd: C:\Temp\{{installer_exe}} /S
     creates: C:\Program Files\Certbot
   when: old_version_exist is undefined or (forece_isntall is defined and forece_isntall)
   tags: install
@@ -68,3 +75,9 @@
   ansible.windows.win_command:
     cmd: certbot certonly -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
   register: create_cert_result
+  ignore_errors: yes
+
+- name: collect error log
+  ansible.builtin.fetch:
+    src: C:\\keychest\\log\\letsencrypt.log
+    dest: ./error.log

@@ -15,6 +15,9 @@ certbot_work_dir: "{{working_dir_base}}\\work"
 certbot_logs_dir: "{{working_dir_base}}\\log"
 certbot_config_dir: "{{working_dir_base}}\\config"
 
+installer_exe: certbot-beta-installer-win_amd64.exe
+installer_exe: certbot-beta-installer-win32.exe
+
 ## certbot installation controlling
 force_isntall: false
 
