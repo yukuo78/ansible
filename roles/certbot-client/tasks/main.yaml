@@ -80,4 +80,5 @@
 - name: collect error log
   ansible.builtin.fetch:
     src: C:\\keychest\\log\\letsencrypt.log
-    dest: ./error.log
+    dest: ./error_logs/
+    flat: true
