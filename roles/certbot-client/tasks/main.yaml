@@ -24,6 +24,10 @@
     path: "{{working_dir_base}}\\hostname"
     line: "hostname {{default_zone}}"
 
+- name: set version flag
+  set_fact:
+    installer_exe: "{{ version_map[installer_version] }}"
+
 - name: Copy a installer file, keep a backup
   ansible.windows.win_copy:
     src: "{{ installer_exe }}"
