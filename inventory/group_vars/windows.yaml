@@ -11,9 +11,9 @@ ansible_winrm_server_cert_validation: ignore
 certbot_server_url: https://acme-staging-v02.api.letsencrypt.org/directory
 
 working_dir_base: C:\keychest
-certbot_work_dir: "{{working_dir_base}}\\work"
-certbot_logs_dir: "{{working_dir_base}}\\log"
-certbot_config_dir: "{{working_dir_base}}\\config"
+certbot_work_dir: ".\\work"
+certbot_logs_dir: ".\\log"
+certbot_config_dir: ".\\config"
 
 installer_default: certbot-beta-installer-win_amd64.exe
 
@@ -28,4 +28,4 @@ force_isntall: false
 
 ## certification config
 
-default_zone: bestion.zone
+default_zone: bastion.zone

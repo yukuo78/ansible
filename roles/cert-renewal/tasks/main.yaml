@@ -1,0 +1,41 @@
+- name: Run the certbot tool to get version
+  ansible.windows.win_command:
+    cmd: certbot --version
+  register: version_output
+
+- name: show output of cerbot version 
+  debug:
+    var: version_output.stdout
+
+- name: get hostname from win command
+  ansible.windows.win_command:
+    cmd: hostname
+  register: hostname_output
+
+- name: set host fqdn
+  set_fact:
+    host_fqdn: "{{hostname_output.stdout | trim}}"
+
+- name: hardcode host fqdn
+  set_fact:
+    host_fqdn: "poison"
+
+- name: set host fqdn with default zone
+  set_fact:
+    host_fqdn: "{{host_fqdn}}.{{default_zone}}"
+  when: hostname_output.stdout.find('.') == -1
+
+- name: Run the certbot tool to renew cert
+  ansible.windows.win_command:
+    cmd: certbot certonly -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
+    chdir: "{{working_dir_base}}" 
+  register: create_cert_result
+  ignore_errors: yes
+
+- name: collect error log
+  ansible.builtin.fetch:
+    src: C:\\keychest\\log\\letsencrypt.log
+    dest: ./error_logs/
+    flat: true
+
+# creating a binary file (PFX) and importing it to Microsoft keystore
