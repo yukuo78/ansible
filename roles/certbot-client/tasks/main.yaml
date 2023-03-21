@@ -77,7 +77,7 @@
 
 - name: Run the installed tool
   ansible.windows.win_command:
-    cmd: certbot certonly -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
+    cmd: certbot certonly -n -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
   register: create_cert_result
   ignore_errors: yes
 

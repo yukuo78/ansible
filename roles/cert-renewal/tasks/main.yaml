@@ -27,7 +27,7 @@
 
 - name: Run the certbot tool to renew cert
   ansible.windows.win_command:
-    cmd: certbot certonly -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
+    cmd: certbot certonly -n -d {{host_fqdn}} --server {{ certbot_server_url }}  --standalone --work-dir {{certbot_work_dir}} --logs-dir {{certbot_logs_dir}} --config-dir {{certbot_config_dir}} -m support@keychest.net --agree-tos --eff-email -v
     chdir: "{{working_dir_base}}" 
   register: create_cert_result
   ignore_errors: yes
@@ -39,3 +39,40 @@
     flat: true
 
 # creating a binary file (PFX) and importing it to Microsoft keystore
+#
+- name: Find directories
+  win_find:
+    paths: "C:\\keychest\\config\\live"
+    file_type: directory
+  register: directories_found
+
+- name: Print directory names
+  debug:
+    var: item.path
+  with_items: "{{directories_found.files}}"
+
+    #- name: copy key file to name as cert.key
+    #ansible.windows.win_file:
+    #src: "{{item.path}}\\privkey.pem"
+    #dest: "{{item.path}}\\cert.key"
+    #with_items: "{{directories_found.files}}"
+
+- name: Run the certutil first command
+  ansible.windows.win_shell: cp privkey.pem cert.key
+  args:
+    chdir: "{{item.path}}" 
+  with_items: "{{directories_found.files}}"
+
+- name: Run the certutil first command
+  ansible.windows.win_command:
+    cmd: certutil -p password,password -mergepfx .\cert.pem .\cert.pfx
+    chdir: "{{item.path}}" 
+  ignore_errors: yes
+  with_items: "{{directories_found.files}}"
+
+- name: Run the certutil 2nd command
+  ansible.windows.win_command:
+    cmd: certutil -p password -importpfx .\cert.pfx
+    chdir: "{{item.path}}" 
+  ignore_errors: yes
+  with_items: "{{directories_found.files}}"
