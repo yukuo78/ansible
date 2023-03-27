@@ -14,10 +14,11 @@ ansible-playbook -i inventory/hosts.ini -l windows playbooks/cert-renewal.yaml -
 
 ## Procedure to Prepare ansible box
 
+Below procedure are verified on CentOS Stream release 9. You might need adjust for other linux distribution.
 
-`yum install ansible-core-2.13.5-1.el9`: This installs Ansible Core version 2.13.5-1 on a system running Red Hat Enterprise Linux (RHEL) version 9. This command uses the yum package manager to download and install the necessary packages and dependencies.
+`yum install ansible-core-2.13.5-1.el9`: This installs Ansible Core version 2.13.5-1 on a system running CentOS Linux version 9. This command uses the yum package manager to download and install the necessary packages and dependencies.
 
-`yum install python3-pip`: This installs the pip package manager for Python 3 on a RHEL 9 system. Pip is used to install Python packages and libraries, including Ansible modules.
+`yum install python3-pip`: This installs the pip package manager for Python 3 on CentOS system. Pip is used to install Python packages and libraries, including Ansible modules.
 
 `python3 -m pip install --user --ignore-installed pywinrm`: This installs the pywinrm library for Python 3, which is used to communicate with Windows machines over WinRM (Windows Remote Management) protocol. The --user option installs the package for the current user only, and --ignore-installed option ignores previously installed versions of the package.
 
