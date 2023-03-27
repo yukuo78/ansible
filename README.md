@@ -62,7 +62,8 @@ For step 2) - we use the 'certutil' tool.
 ## Details for testing
 
 Linux server:
-root@157.245.60.92 - password: ansible-kc
+~~root@157.245.60.92 - password: ansible-kc~~
+root@159.89.198.27  - password: ansible-2KC
 
 Win servers:
 IP: 18.143.103.50 - default admin password: JQ(qL.Ly(Ai
